@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <br>
+        <br>
+        <h1 class="text-center">Certificate Management System</h1>
+        <br>
+        <br>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#birth" data-toggle="tab">Birth Certificate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#death" data-toggle="tab">Death Certificate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#view" data-toggle="tab">View Certificates</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#find" data-toggle="tab">Find Certificate</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="birth">
+                <h2>Birth Certificate Form</h2>
+                <form id="birthForm">
+                    <div class="form-group">
+                        <input type="text" id="childName" placeholder="Child's Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" id="dob" placeholder="Date of Birth" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="timeOfBirth" placeholder="Time of Birth" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="hospitalName" placeholder="Hospital Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="gender" placeholder="Gender" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="abnormalities" placeholder="Abnormalities (optional)">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="parentName" placeholder="Parent's Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="placeOfBirth" placeholder="Place of Birth" required>
+                    </div>
+                    <button type="button" onclick="addCertificate('birth')">Add to Blockchain</button>
+                    <button type="button" onclick="downloadCertificate('birth')">Download Certificate</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="death">
+                <h2>Death Certificate Form</h2>
+                <form id="deathForm">
+                    <div class="form-group">
+                        <input type="text" id="deceasedName" placeholder="Deceased Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="date" id="dateOfDeath" placeholder="Date of Death" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="timeOfDeath" placeholder="Time of Death" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="placeOfDeath" placeholder="Place of Death" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="causeOfDeath" placeholder="Cause of Death" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="reportedDeath" placeholder="Reported Death" required>
+                    </div>
+                    <button type="button" onclick="addCertificate('death')">Add to Blockchain</button>
+                    <button type="button" onclick="downloadCertificate('death')">Download Certificate</button>
+                </form>
+            </div>
+            <div class="tab-pane fade" id="view">
+                <h2>Issued Certificates</h2>
+                <ul class="nav nav-tabs mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="filterCertificates('all'); return false;">All (<span id="totalAll">0</span>)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="filterCertificates('birth'); return false;">Birth (<span id="totalBirth">0</span>)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="filterCertificates('death'); return false;">Death (<span id="totalDeath">0</span>)</a>
+                    </li>
+                </ul>
+                <table class="table" id="certificatesList">
+                    <thead>
+                        <tr>
+                            <th>Certificate ID</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="certificatesList"></tbody>                  
+                </table>
+                <div id="certificateList">
+                    <!-- Certificates will be dynamically populated here -->
+                </div>
+            </div>
+            <div class="tab-pane fade" id="find">
+                <h2>Find Certificate</h2>
+                <input type="text" id="findCertificateId" placeholder="Enter Certificate ID">
+                <button onclick="findCertificate()">Find</button>
+                <div id="certificateDetails" class="mt-3"></div>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h2>Verify Certificate</h2>
+            <input type="text" id="certificateId" placeholder="Certificate ID">
+            <button onclick="verifyCertificate()">Verify</button>
+            <p id="verificationResult"></p>
+        </div>
+    </div>
+    
+    <!-- Web3.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+    <!-- Your custom JavaScript file -->
+    <script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
